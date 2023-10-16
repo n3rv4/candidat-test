@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  caddy:
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+      - target: 443
+        published: 443
+        protocol: tcp
+      - target: 443
+        published: 443
+        protocol: udp
+
+  php:
+    # uncomment the following lines, and run `composer config cache-dir` locally to know your cache path
+    #volumes:
+      #- /Users/dcarrier/Library/Caches/composer:/root/.composer/cache
+    ports:
+      - target: 9000
+        published: 9000
+        protocol: tcp
+
+  database:
+    ports:
+      - "5432:5432"

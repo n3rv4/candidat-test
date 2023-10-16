@@ -1,0 +1,88 @@
+image: php:8.1-cli-alpine
+
+before_script:
+    - sh devops/ci/docker-install.sh > /dev/null
+
+stages:
+  - build
+  - code-quality
+  - testing
+  - dependencies-validation
+
+cache: &global_cache
+  key: $CI_PIPELINE_ID
+  paths:
+    - var
+    - vendor
+    - vendor-bin/qa/vendor
+  policy: pull
+
+build:
+  stage: build
+  cache:
+    <<: *global_cache
+    policy: pull-push
+  script:
+    - composer install
+
+composer-outdated:
+  stage: dependencies-validation
+  needs: ["build"]
+  script:
+    - composer outdated --strict --ignore=doctrine/dbal
+  allow_failure: true
+
+int-yaml:
+  stage: code-quality
+  needs: ["build"]
+  script:
+    - bin/console lint:yaml config
+
+lint-twig:
+  stage: code-quality
+  needs: ["build"]
+  script:
+    - bin/console lint:twig templates
+
+lint-container:
+  stage: code-quality
+  needs: ["build"]
+  script:
+    - bin/console lint:container
+
+phpcs:
+  stage: code-quality
+  needs: ["build"]
+  script:
+    - vendor/bin/phpcs -p -n --colors --standard=.phpcs.xml src tests
+
+php-cs-fixer:
+  stage: code-quality
+  needs: ["build"]
+  script:
+    - vendor/bin/php-cs-fixer fix --using-cache=no --verbose --diff --dry-run
+
+phpmd:
+  stage: code-quality
+  needs: ["build"]
+  script:
+    - vendor/bin/phpmnd src tests
+
+phpstan:
+  stage: code-quality
+  needs: ["build"]
+  script:
+    - vendor/bin/phpstan
+
+phpinsights:
+  stage: code-quality
+  needs: ["build"]
+  script:
+    - vendor/bin/phpinsights analyse --no-interaction --disable-security-check --min-quality=100
+      --min-complexity=90 --min-architecture=100 --min-style=100
+
+unit-tests:
+  stage: testing
+  needs: ["build"]
+  script:
+    - bin/phpunit

@@ -1,0 +1,71 @@
+version: '3'
+
+services:
+  caddy:
+    container_name: ${COMPOSE_PROJECT_NAME}_caddy
+    build:
+        context: .
+        dockerfile: devops/caddy/Dockerfile
+        args:
+            - APP_ENV=${APP_ENV:-dev}
+    volumes:
+      - .:/app:ro
+      - ./devops/caddy/${APP_ENV}/Caddyfile:/etc/caddy/Caddyfile
+      - ./devops/caddy/certs:/usr/local/share/ca-certificates
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    environment:
+        SERVER_NAME: ${SERVER_NAME}
+
+  php:
+    container_name: ${COMPOSE_PROJECT_NAME}_php
+    build:
+        context: .
+        dockerfile: devops/php/Dockerfile
+        args:
+            - APP_ENV=${APP_ENV:-dev}
+    restart: unless-stopped
+    volumes:
+      - ./:/app
+
+  node:
+    container_name: ${COMPOSE_PROJECT_NAME}_node
+    build:
+        context: .
+        dockerfile: devops/node/Dockerfile
+    volumes:
+      - ./:/srv/app
+    profiles:
+      - node
+
+  database:
+    container_name: ${COMPOSE_PROJECT_NAME}_postgres
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+    volumes:
+      - database_data:/var/lib/postgresql/data:rw
+    restart: unless-stopped
+
+  qa:
+    container_name: ${COMPOSE_PROJECT_NAME}_qa
+    build:
+        context: .
+        dockerfile: devops/qa/Dockerfile
+        args:
+          - WITH_COMPOSER_DEPS=1
+          - PHPSTAN_VERSION=^1.11@dev
+    volumes:
+      - ./:/qa
+    working_dir: /qa
+    restart: unless-stopped
+    profiles:
+        - qa        
+
+volumes:
+  database_data: ~
+  caddy_data: ~
+  caddy_config: ~

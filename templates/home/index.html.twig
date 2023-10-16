@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block body %}
+<div class="grid grid-cols-3 gap-4">
+    <div class="lg:col-span-2">
+        <h2 class="text-2xl italic pb-8">Recent articles</h2>
+        <div id="article-list">
+            {% include 'article/list.html.twig' with { articles } %}
+        </div>
+    </div>
+    <div class="">
+        {% include 'category/list.html.twig' with { categories } %}
+    </div>
+</div>
+{% endblock %}

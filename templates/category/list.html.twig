@@ -1,0 +1,10 @@
+<div class="sticky">
+    <h2 class="text-2xl italic pb-8">Categories</h2>
+    <ol>
+        {% for category in categories %}
+        <li>
+            <a href="{{ path('category_show', { 'slug': category.slug }) }}" class="text-blue-600 visited:text-purple-600">{{ category.name }}</a>
+        </li>
+        {% endfor %}
+    </ol>
+</div>

@@ -1,0 +1,6 @@
+{$SERVER_NAME}
+log
+root * /app/public
+php_fastcgi php:9000
+encode gzip zstd
+file_server

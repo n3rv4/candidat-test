@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block body %}
+    <h1 class="article-title">{{ article.title }}</h1>
+    <div id="article-content">
+        {{ article.content|raw }}
+    </div>
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div class="comment-area mb-5">
+            {{ form(commentForm, { attr: { class: 'comment-form' } }) }}
+        </div>
+        <hr>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
