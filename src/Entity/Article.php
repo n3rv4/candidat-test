@@ -19,14 +19,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article implements TimestampedInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'ulid', unique: true)]
+    #[Assert\Ulid]
+    private ?Ulid $id;
 
     #[ORM\Column(type: Types::TEXT)]
     private string $title;
@@ -52,12 +54,13 @@ class Article implements TimestampedInterface
     #[ORM\ManyToOne]
     private ?Media $featuredImage = null;
 
-    public function __construct()
+    public function __construct(?Ulid $id = new Ulid())
     {
+        $this->id = $id;
         $this->categories = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?Ulid
     {
         return $this->id;
     }

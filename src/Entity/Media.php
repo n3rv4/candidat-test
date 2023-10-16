@@ -16,14 +16,16 @@ namespace App\Entity;
 use App\Repository\MediaRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'ulid', unique: true)]
+    #[Assert\Ulid]
+    private ?Ulid $id;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $name = null;
@@ -34,7 +36,12 @@ class Media
     #[ORM\Column(type: Types::TEXT)]
     private ?string $filename = null;
 
-    public function getId(): ?int
+    public function __construct(?Ulid $id = new Ulid())
+    {
+        $this->id = $id;
+    }
+
+    public function getId(): ?Ulid
     {
         return $this->id;
     }

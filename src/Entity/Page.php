@@ -17,14 +17,16 @@ use App\Model\TimestampedInterface;
 use App\Repository\PageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PageRepository::class)]
 class Page implements TimestampedInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'ulid', unique: true)]
+    #[Assert\Ulid]
+    private ?Ulid $id;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $title = null;
@@ -41,7 +43,12 @@ class Page implements TimestampedInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTime $updatedAt = null;
 
-    public function getId(): ?int
+    public function __construct(?Ulid $id = new Ulid())
+    {
+        $this->id = $id;
+    }
+
+    public function getId(): ?Ulid
     {
         return $this->id;
     }
