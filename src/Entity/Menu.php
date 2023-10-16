@@ -30,7 +30,7 @@ class Menu
     private ?Ulid $id;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(nullable: true)]
     private ?int $menuOrder = null;
@@ -42,7 +42,7 @@ class Menu
     private Collection $subMenus;
 
     #[ORM\Column]
-    private ?bool $isVisble = null;
+    private ?bool $isVisible = null;
 
     #[ORM\ManyToOne]
     private ?Article $article = null;
@@ -63,12 +63,17 @@ class Menu
         $this->subMenus = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     public function getId(): ?Ulid
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -124,14 +129,14 @@ class Menu
         return $this->subMenus;
     }
 
-    public function isIsVisble(): ?bool
+    public function isIsVisible(): ?bool
     {
-        return $this->isVisble;
+        return $this->isVisible;
     }
 
-    public function setIsVisble(bool $isVisble): static
+    public function setIsVisible(bool $isVisible): static
     {
-        $this->isVisble = $isVisble;
+        $this->isVisible = $isVisible;
 
         return $this;
     }

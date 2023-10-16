@@ -15,6 +15,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\Menu;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -48,7 +49,17 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Articles', 'fas fa-newspaper')->setSubItems([
             MenuItem::linkToCrud('All articles', 'fas fa-newspaper', Article::class),
             MenuItem::linkToCrud('Add', 'fas fa-plus', Article::class)->setAction(Crud::PAGE_NEW),
-            MenuItem::linkToCrud('Categories', 'fas fa-list', Category::class),
+            MenuItem::linkToCrud('Categories', 'fab fa-delicious', Category::class),
+        ]);
+        yield MenuItem::subMenu('Menus', 'fas fa-list')->setSubItems([
+            MenuItem::linkToCrud('Pages', 'fas fa-file', Menu::class)
+                ->setQueryParameter('submenuIndex', MenuCrudController::MENU_PAGES),
+            MenuItem::linkToCrud('Articles', 'fas fa-newspaper', Menu::class)
+                ->setQueryParameter('submenuIndex', MenuCrudController::MENU_ARTICLES),
+            MenuItem::linkToCrud('Categories', 'fab fa-delicious', Menu::class)
+                ->setQueryParameter('submenuIndex', MenuCrudController::MENU_CATEGORIES),
+            MenuItem::linkToCrud('Custom links', 'fas fa-link', Menu::class)
+                ->setQueryParameter('submenuIndex', MenuCrudController::MENU_LINKS),
         ]);
     }
 }

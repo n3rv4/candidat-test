@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Article;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -37,5 +38,29 @@ final class ArticleCrudController extends AbstractCrudController
         yield AssociationField::new('categories');
         yield DateTimeField::new('createdAt')->hideOnForm();
         yield DateTimeField::new('updatedAt')->hideOnForm();
+    }
+
+    /** @phpstan-ignore-next-line */
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (!$entityInstance instanceof Article) {
+            return;
+        }
+
+        $entityInstance->setCreatedAt(new \DateTimeImmutable());
+
+        parent::persistEntity($entityManager, $entityInstance);
+    }
+
+    /** @phpstan-ignore-next-line */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (!$entityInstance instanceof Article) {
+            return;
+        }
+
+        $entityInstance->setUpdatedAt(new \DateTimeImmutable());
+
+        parent::persistEntity($entityManager, $entityInstance);
     }
 }

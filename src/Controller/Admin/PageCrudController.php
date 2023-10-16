@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Page;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 final class PageCrudController extends AbstractCrudController
@@ -21,6 +22,30 @@ final class PageCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return Page::class;
+    }
+
+    /** @phpstan-ignore-next-line */
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (!$entityInstance instanceof Page) {
+            return;
+        }
+
+        $entityInstance->setCreatedAt(new \DateTimeImmutable());
+
+        parent::persistEntity($entityManager, $entityInstance);
+    }
+
+    /** @phpstan-ignore-next-line */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (!$entityInstance instanceof Page) {
+            return;
+        }
+
+        $entityInstance->setUpdatedAt(new \DateTimeImmutable());
+
+        parent::persistEntity($entityManager, $entityInstance);
     }
 
     /*

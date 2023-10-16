@@ -15,6 +15,7 @@ namespace App\Repository;
 
 use App\Entity\Menu;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -30,5 +31,31 @@ final class MenuRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Menu::class);
+    }
+
+    /**
+     * @return Menu[]
+     */
+    public function getAllVisibleMenus(): array
+    {
+        $results = $this->createQueryBuilder('m')
+            ->where('m.isVisible = true')
+            ->orderBy('m.menuOrder')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        if (\is_array($results)) {
+            return $results;
+        }
+
+        return [];
+    }
+
+    public function getIndexQueryBuilder(string $field): QueryBuilder
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.'.$field.' IS NOT NULL OR (m.page IS NULL AND m.article IS NULL AND m.link IS NULL AND m.category IS NULL)')
+        ;
     }
 }
