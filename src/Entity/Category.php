@@ -28,10 +28,10 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $slug = null;
+    private string $slug;
 
     #[ORM\Column(length: 10)]
     private ?string $color = null;
@@ -44,12 +44,17 @@ class Category
         $this->articles = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -61,7 +66,7 @@ class Category
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
@@ -107,10 +112,5 @@ class Category
         $this->articles->removeElement($article);
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->name;
     }
 }

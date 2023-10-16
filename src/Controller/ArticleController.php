@@ -23,7 +23,7 @@ final class ArticleController extends AbstractController
     #[Route('/article/{slug}', name: 'article_show')]
     public function show(?Article $article): Response
     {
-        if (!$article) {
+        if (!$article instanceof Article) {
             return $this->redirectToRoute('app_home');
         }
 

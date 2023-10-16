@@ -203,7 +203,7 @@ assets-watch:
 ## —— ✅ Test ——
 .PHONY: tests
 tests: env=test ## Run all tests
-tests: db-reset load-fixtures unit-tests
+tests: db-reset unit-tests
 
 .PHONY: unit-tests
 unit-tests: ## Run unit tests

@@ -29,10 +29,10 @@ class Article implements TimestampedInterface
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $title = null;
+    private string $title;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $slug = null;
+    private string $slug;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
@@ -62,7 +62,7 @@ class Article implements TimestampedInterface
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -74,7 +74,7 @@ class Article implements TimestampedInterface
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }

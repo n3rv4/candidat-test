@@ -23,6 +23,8 @@
         "symfony/yaml": "^6.2"
     },
     "require-dev": {
+        "hautelook/alice-bundle": "^2.12",
+        "phpunit/phpunit": "^9.5",
         "pyrech/composer-changelogs": "^2.1",
         "symfony/browser-kit": "^6.2",
         "symfony/css-selector": "^6.2",

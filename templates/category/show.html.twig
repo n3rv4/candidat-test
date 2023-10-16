@@ -5,6 +5,6 @@
 {% block body %}
     <h3 class="text-xl">{{ category.name }}</h3>
     <div id="articles-list">
-        {% include 'article/list.html.twig' with { articles: category.articles } %}
+        {% include 'article/list.html.twig' with {articles: category.articles} %}
     </div>
 {% endblock %}
