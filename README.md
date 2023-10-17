@@ -36,7 +36,7 @@ machine IP or use a tool like `dnsmasq` to map the daemon to a local tld
 
 Juste run the following command: `make install`
 
-# Candidate test
+# Applicant test
 
 ## Purpose
 
