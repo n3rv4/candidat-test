@@ -1,9 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the BT project.
+ *
+ * Copyright (c) 2023 BT
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
@@ -17,9 +27,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Uid\Uuid;
 
-/*
+/**
  * @method User getUser()
  */
 final class UserCrudController extends AbstractCrudController
@@ -27,6 +36,7 @@ final class UserCrudController extends AbstractCrudController
     public function __construct(
         private readonly EntityRepository $entityRepository,
         private readonly UserPasswordHasherInterface $userPasswordHasher) {}
+
     public static function getEntityFqcn(): string
     {
         return User::class;
@@ -36,7 +46,8 @@ final class UserCrudController extends AbstractCrudController
     {
         return $this->entityRepository->createQueryBuilder($searchDto, $entityDto, $fields, $filters)
             ->andWhere('entity.id != :userId')
-            ->setParameter('userId', $this->getUser()->getId(), 'uuid');
+            ->setParameter('userId', $this->getUser()->getId(), 'uuid')
+        ;
     }
 
     public function configureFields(string $pageName): iterable
@@ -44,7 +55,8 @@ final class UserCrudController extends AbstractCrudController
         yield TextField::new('email');
         $passwordField = TextField::new('password')
             ->setFormType(PasswordType::class)
-            ->onlyOnForms();
+            ->onlyOnForms()
+        ;
 
         if ($pageName === Crud::PAGE_EDIT) {
             $passwordField->setRequired(false);
@@ -54,15 +66,17 @@ final class UserCrudController extends AbstractCrudController
             ->allowMultipleChoices()
             ->renderAsBadges([
                 'ROLE_ADMIN' => 'success',
-                'ROLE_AUTHOR' => 'warning'
+                'ROLE_AUTHOR' => 'warning',
             ])
             ->setChoices([
-            'Admin' => 'ROLE_ADMIN',
-            'Author' => 'ROLE_AUTHOR',
-            'User' => 'ROLE_USER',
-            ]);
+                'Admin' => 'ROLE_ADMIN',
+                'Author' => 'ROLE_AUTHOR',
+                'User' => 'ROLE_USER',
+            ])
+        ;
     }
 
+    /** @phpstan-ignore-next-line */
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         /** @var User $user */
@@ -77,6 +91,7 @@ final class UserCrudController extends AbstractCrudController
         parent::persistEntity($entityManager, $entityInstance);
     }
 
+    /** @phpstan-ignore-next-line */
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         $user = $entityInstance;

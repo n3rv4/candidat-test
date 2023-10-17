@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Repository\ArticleRepository;
-use App\Repository\CategoryRepository;
+use App\Service\ArticleManagerInterface;
+use App\Service\CategoryManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,11 +22,13 @@ use Symfony\Component\Routing\Annotation\Route;
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
-    {
+    public function index(
+        ArticleManagerInterface $articleManager,
+        CategoryManagerInterface $categoryManager
+    ): Response {
         return $this->render('home/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
-            'categories' => $categoryRepository->findAll(),
+            'articles' => $articleManager->getPaginatedArticles(),
+            'categories' => $categoryManager->getPaginatedCategories(),
         ]);
     }
 }

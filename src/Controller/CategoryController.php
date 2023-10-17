@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Service\ArticleManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 final class CategoryController extends AbstractController
 {
     #[Route('/category/{slug}', name: 'category_show')]
-    public function show(?Category $category): Response
+    public function show(?Category $category, ArticleManagerInterface $articleManager): Response
     {
         if (!$category instanceof Category) {
             return $this->redirectToRoute('app_home');
@@ -29,6 +30,7 @@ final class CategoryController extends AbstractController
 
         return $this->render('category/show.html.twig', [
             'category' => $category,
+            'articles' => $articleManager->getPaginatedArticles($category),
         ]);
     }
 }

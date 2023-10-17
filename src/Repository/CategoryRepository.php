@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Article;
 use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -30,5 +32,22 @@ final class CategoryRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
+    }
+
+    public function findPerPagination(?Article $article = null): Query
+    {
+        $queryBuilder = $this->createQueryBuilder('category')
+            ->orderBy('category.name', 'ASC')
+        ;
+
+        if ($article !== null) {
+            $queryBuilder
+                ->leftJoin('category.articles', 'a')
+                ->andWhere('a.id = :article')
+                ->setParameter('article', $article->getId(), 'uuid')
+            ;
+        }
+
+        return $queryBuilder->getQuery();
     }
 }

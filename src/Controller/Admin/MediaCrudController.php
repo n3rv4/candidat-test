@@ -31,13 +31,18 @@ final class MediaCrudController extends AbstractCrudController
         $mediasDirectory = $this->getParameter('medias_directory');
         $uploadsDirectory = $this->getParameter('uploads_directory');
 
+        if (!\is_string($mediasDirectory) || !\is_string($uploadsDirectory)) {
+            throw new \RuntimeException('The medias_directory and uploads_directory parameters must be strings.');
+        }
+
         yield TextField::new('name');
         yield TextField::new('altText', 'Alternative text');
 
         $imageFields = ImageField::new('filename', 'Media')
             ->setBasePath($mediasDirectory)
             ->setUploadDir($uploadsDirectory)
-            ->setUploadedFileNamePattern('[slug]-[uuid].[extension]');
+            ->setUploadedFileNamePattern('[slug]-[uuid].[extension]')
+        ;
 
         if ($pageName === Crud::PAGE_EDIT) {
             $imageFields->setRequired(false);

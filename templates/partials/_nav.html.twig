@@ -10,7 +10,7 @@
             {% if is_granted('ROLE_AUTHOR') %}
                 <a href="{{ path('admin') }}" class="text-sm font-semibold leading-6 text-gray-900">Dashboard</a>
             {% endif %}
-            <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Articles</a>
+            <a href="{{ path('article_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Articles</a>
             <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Pages</a>
         </div>
         <div class="flex flex-1 items-center justify-end gap-x-6">

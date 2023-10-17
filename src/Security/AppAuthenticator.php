@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the BT project.
+ *
+ * Copyright (c) 2023 BT
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Security;
 
 use Symfony\Bundle\SecurityBundle\Security;
@@ -22,9 +33,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
-    {
-    }
+    public function __construct(private UrlGeneratorInterface $urlGenerator) {}
 
     public function authenticate(Request $request): Passport
     {
@@ -44,7 +53,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+        if (\is_string($targetPath = $this->getTargetPath($request->getSession(), $firewallName))) {
             return new RedirectResponse($targetPath);
         }
 

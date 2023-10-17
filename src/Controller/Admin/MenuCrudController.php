@@ -120,7 +120,7 @@ final class MenuCrudController extends AbstractCrudController
                 parse_str($parameters, $result);
             }
 
-            if  (!isset($result['submenuIndex'])) {
+            if (!isset($result['submenuIndex'])) {
                 return 0;
             }
 

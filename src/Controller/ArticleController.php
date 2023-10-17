@@ -14,12 +14,22 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Service\ArticleManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class ArticleController extends AbstractController
 {
+    #[Route('/articles', name: 'article_index')]
+    public function index(
+        ArticleManagerInterface $articleManager
+    ): Response {
+        return $this->render('article/index.html.twig', [
+            'articles' => $articleManager->getPaginatedArticles(),
+        ]);
+    }
+
     #[Route('/article/{slug}', name: 'article_show')]
     public function show(?Article $article): Response
     {

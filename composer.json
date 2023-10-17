@@ -1,6 +1,6 @@
 {
-    "name": "alximy/boilerplate",
-    "description": "A boilerplate for PHP/Symfony projects",
+    "name": "bt/blog",
+    "description": "A simple blog",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
@@ -13,6 +13,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
         "easycorp/easyadmin-bundle": "^4.7",
+        "knplabs/knp-paginator-bundle": "^6.2",
         "runtime/frankenphp-symfony": "^0.1.1",
         "symfony/console": "^6.2",
         "symfony/dotenv": "^6.2",

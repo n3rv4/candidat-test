@@ -28,7 +28,7 @@ class Media
     private ?Ulid $id;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $altText = null;
@@ -41,12 +41,17 @@ class Media
         $this->id = $id;
     }
 
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     public function getId(): ?Ulid
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -80,10 +85,5 @@ class Media
         $this->filename = $filename;
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->name;
     }
 }
