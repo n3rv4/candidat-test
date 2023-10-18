@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the BT project.
+ *
+ * Copyright (c) 2023 BT
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Entity;
 
 use App\Repository\CommentsRepository;
@@ -20,6 +31,12 @@ class Comments
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?User $appUser = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Article $article = null;
 
     public function getId(): ?int
     {
@@ -47,6 +64,30 @@ class Comments
     public function setCreatedAt(): static
     {
         $this->createdAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function getAppUser(): ?User
+    {
+        return $this->appUser;
+    }
+
+    public function setAppUser(?User $appUser): static
+    {
+        $this->appUser = $appUser;
+
+        return $this;
+    }
+
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
+
+    public function setArticle(?Article $article): static
+    {
+        $this->article = $article;
 
         return $this;
     }
