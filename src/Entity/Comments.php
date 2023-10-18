@@ -16,17 +16,20 @@ namespace App\Entity;
 use App\Repository\CommentsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CommentsRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Comments
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'ulid', unique: true)]
+    #[Assert\Ulid]
+    private ?Ulid $id;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Comment cannot be blank')]
     private ?string $content = null;
 
     #[ORM\Column]
@@ -38,7 +41,12 @@ class Comments
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Article $article = null;
 
-    public function getId(): ?int
+    public function __construct(?Ulid $id = new Ulid())
+    {
+        $this->id = $id;
+    }
+
+    public function getId(): ?Ulid
     {
         return $this->id;
     }

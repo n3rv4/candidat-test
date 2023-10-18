@@ -57,6 +57,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->comments = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->email;
+    }
+
     public function getId(): ?Ulid
     {
         return $this->id;

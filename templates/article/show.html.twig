@@ -12,7 +12,21 @@
     <div id="article-content">
         {{ article.content|raw }}
     </div>
+    <div>
+            {% for comment in comments %}
+                <div class="bg-gray-300 rounded-2xl px-4 pt-2 pb-2.5 my-2">
+                    <div class="font-semibold text-sm text-gray-800 leading-relaxed">{{ comment.appUser }}</div>
+                    <div class="text-normal leading-snug text-gray-700 md:leading-normal">
+                        {{ comment.content }}
+                    </div>
+                </div>
+            {% endfor %}
 
+            {{ form_start(commentForm,{'attr':{'novalidate':'novalidate'}}) }}
+            {{ form_row(commentForm.content) }}
+            <button type="submit" class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 py-2 px-4">Add Comment</button>
+            {{ form_end(commentForm) }}
+    </div>
 {% endblock %}
 
 {% block javascripts %}
