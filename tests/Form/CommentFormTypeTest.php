@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace App\Tests;
+namespace App\Tests\Form;
 
 use App\Entity\Comments;
 use App\Form\CommentFormType;
