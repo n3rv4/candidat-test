@@ -18,6 +18,7 @@ use App\Entity\Category;
 use App\Entity\Media;
 use App\Entity\Menu;
 use App\Entity\User;
+use App\Entity\Comments;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -67,6 +68,7 @@ final class DashboardController extends AbstractDashboardController
                 MenuItem::linkToCrud('All articles', 'fas fa-newspaper', Article::class),
                 MenuItem::linkToCrud('Add', 'fas fa-plus', Article::class)->setAction(Crud::PAGE_NEW),
                 MenuItem::linkToCrud('Categories', 'fab fa-delicious', Category::class),
+                MenuItem::linkToCrud('Comments', 'fas fa-comments', Comments::class),
             ]);
 
             yield MenuItem::subMenu('Medias', 'fas fa-photo-video')->setSubItems([
