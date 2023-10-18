@@ -1,4 +1,4 @@
-#-include .env .env.local
+-include .env .env.local
 export
 
 DOCKER 			   = docker
