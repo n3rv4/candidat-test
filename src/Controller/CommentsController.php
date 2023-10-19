@@ -13,17 +13,27 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Article;
+use App\Entity\Comments;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CommentsController extends AbstractController
 {
-    #[Route('/comments', name: 'app_comments')]
-    public function index(): Response
+    #[Route('/delete-comment/{id}', name: 'delete_comment')]
+    public function delete(EntityManagerInterface $entityManager, Comments $comment): Response
     {
-        return $this->render('comments/index.html.twig', [
-            'controller_name' => 'CommentsController',
-        ]);
+        $loggedInUser = $this->getUser();
+        $article = $entityManager->getRepository(Article::class)->findOneBy(['id' => $comment->getArticle()->getId()]);
+        if ($loggedInUser->getId() === $comment->getAppUser()->getId()) {
+            $entityManager->remove($comment);
+            $entityManager->flush();
+        } else {
+            throw new AccessDeniedException('Access Denied: You do not have permission to remove this comment.');
+        }
+        return $this->redirectToRoute('article_show',['slug' => $article->getSlug()]);
     }
 }
