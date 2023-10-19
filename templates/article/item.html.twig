@@ -9,7 +9,7 @@
         </div>
         <div class="">
             <h2 class="article-title">
-                <a href="{{ path('article_show', {'slug': article.slug}) }}" class="text-decoration-none">{{ article.title }}</a>
+                <a href="{{ path('article_show', {'slug': article.slug}) }}" class="text-decoration-none font-semibold">{{ article.title }}</a>
             </h2>
             <p>
                 {{ article.createdAt|date('d M Y') }} / <b>{{ article.categories|categoriesToString|raw }}</b>
